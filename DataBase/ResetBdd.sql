@@ -80,7 +80,74 @@ CREATE TABLE `users_projets` (
   `Projets_ID` int NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
---
+INSERT INTO `users_projets` (`Users_ID`, `Projets_ID`) VALUES
+('2','1'),
+('3','1'),
+('4','2'),
+('1','3'),
+('6','5');
+
+CREATE TABLE `dce` (
+  `ID dce` int NOT NULL,
+  `Nom` varchar(100) NOT NULL,
+  `Lots du marché` varchar(45) NOT NULL,
+  `Projets_ID` int NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+
+
+CREATE TRIGGER update_dce_nom
+AFTER INSERT ON dce
+FOR EACH ROW
+BEGIN
+    DECLARE projet_nom VARCHAR(100);
+    SELECT Nom INTO projet_nom FROM projets WHERE `ID projet` = NEW.Projets_ID;
+    UPDATE dce SET Nom = projet_nom WHERE `ID dce` = NEW.`ID dce`;
+END;;
+
+DELIMITER //
+
+CREATE TRIGGER insert_lots_du_marche
+AFTER INSERT ON dce
+FOR EACH ROW
+BEGIN
+    DECLARE lot_id INT;
+    DECLARE lot_nom VARCHAR(45);
+    DECLARE proj_id INT;
+    DECLARE done INT DEFAULT FALSE;
+    DECLARE cur CURSOR FOR SELECT `ID lot`, `Nom`, `Projets_ID` FROM lots_du_marche WHERE DCE_ID = NEW.`ID dce`;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
+    
+    OPEN cur;
+    
+    insert_loop: LOOP
+        FETCH cur INTO lot_id, lot_nom, proj_id;
+        IF done THEN
+            LEAVE insert_loop;
+        END IF;
+        
+        INSERT INTO lots (`ID lot`, `Nom`, `Montant`, `Date début`, `Date fin`, DCE_ID, Marchés_ID, Projets_ID)
+        VALUES (lot_id, lot_nom, '', '', '', NEW.`ID dce`, 0, proj_id); -- Remplace les valeurs des champs Montant, Date début, Date fin, Marchés_ID par celles appropriées
+        
+    END LOOP;
+    
+    CLOSE cur;
+END;
+//
+
+DELIMITER ;
+
+
+CREATE TABLE `lots` (
+  `ID lot` int NOT NULL,
+  `Nom` varchar(45) NOT NULL,
+  `Montant` varchar(45) NOT NULL,
+  `Date début` varchar(45) NOT NULL,
+  `Date fin` varchar(45) DEFAULT NULL,
+  `DCE_ID` int NOT NULL,
+  `Marchés_ID` int NOT NULL,
+  `Projets_ID` int NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+
 
 -- Index pour la table `dce`
 --
