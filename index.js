@@ -6,13 +6,15 @@ const cors = require('cors');
 
 const app = express();
 
+// Importez les routes centralisées
+const indexRoute = require('./Routes/index');
+// Utilisez le middleware pour le préfixe "/api"
+app.use('/api', indexRoute);
+
 
 app.use(cors());
 app.use(express.json());
 
-app.get('/message', (req, res) => {
-    res.json({ message: "Hello from server!" });
-});
 
 // gestion des erreurs copiée/collée depuis ce lien : https://expressjs.com/en/guide/error-handling.html
 app.use((err, req, res, next) => {
