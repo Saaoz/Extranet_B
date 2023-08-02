@@ -11,6 +11,7 @@ async function getAllProjets(req, res) {
     }
 }
 
+
 // Récupérer 1 projet
 async function getProjet(req, res) {
     try {
