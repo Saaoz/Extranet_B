@@ -12,6 +12,14 @@ async function getLot(id) {
     return rows[0];
 }
 
+// Rechercher des lots par nom (recherche approximative)
+async function searchLots(nom) {
+    const searchTerm = `%${nom}%`; // Ajoutez les "%" pour obtenir une recherche approximative
+    const [rows] = await BddPool.query('SELECT id, nom FROM lot WHERE nom LIKE ?', [searchTerm]);
+    return rows;
+}
+
+
 // Ajouter un nouveau lot
 async function addLot(data) {
     const {nom, montant, date_debut, date_fin, dce_id, marche_id, projet_id} = data;
@@ -31,9 +39,21 @@ async function deleteLot(id) {
     await BddPool.query('DELETE FROM lot WHERE id = ?', [id]);
 }
 
+async function getLotsByProjetId(projetId) {
+    const [rows] = await BddPool.query('SELECT projet.id AS projet_id, lot.id AS lot_id, lot.nom, lot.projet_id FROM projet INNER JOIN lot ON projet.id = lot.projet_id WHERE projet.id = ?', [projetId]);
+    return rows;
+}
+
+
+// async function getLotsByProjetId(id) {
+//     await BddPool.query('SELECT projet.id, lot.id, lot.nom, lot.projet_id FROM projet INNER JOIN lot ON projet.id = lot.projet_id WHERE projet.id = ?', [id]);
+// }
+
 module.exports = {
     getAllLots,
     getLot,
+    searchLots,
+    getLotsByProjetId,
     addLot,
     updateLot,
     deleteLot

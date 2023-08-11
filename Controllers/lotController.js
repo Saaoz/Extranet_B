@@ -26,6 +26,22 @@ async function getLot(req, res) {
     }
 }
 
+
+// Rechercher des lots par nom
+async function searchLots(req, res) {
+    try {
+        const { nom } = req.query;
+        if (!nom) {
+            return res.status(400).json({ message: 'Le nom à rechercher est requis.' });
+        }
+        const lots = await lotModel.searchLots(nom);
+        res.json(lots);
+    } catch (error) {
+        console.error('Erreur lors de la recherche des lots :', error);
+        res.status(500).json({ error: 'Erreur serveur lors de la recherche des lots.' });
+    }
+}
+
 // Ajouter un nouveau lot
 async function addLot(req, res) {
     try {
@@ -61,9 +77,40 @@ async function deleteLot(req, res) {
     }
 }
 
+async function getLotsByProjetId(req, res) {
+    const projetId = req.params.id;
+
+    try {
+        const lots = await lotModel.getLotsByProjetId(projetId);
+        if (lots.length === 0) {
+            res.status(404).json({ message: 'Aucun lot trouvé pour ce projet.' });
+            return;
+        }
+
+        res.json(lots);
+    } catch (error) {
+        console.error('Erreur lors de la récupération:', error);
+        res.status(500).json({ error: 'Erreur serveur lors de la récupération.' });
+    }
+}
+
+
+// async function getLotsByProjetId(req, res) {
+//     try {
+//         const lotid = await lotModel.getLotsByProjetId(req.params.id);
+//         res.json(lotid);
+//     } catch (error) {
+//         console.error('Erreur lors de la récupération:', error)
+//         res.status(500).json({ error: 'Erreur serveur lors de la récupération.' });
+//     }
+// }
+
+
 module.exports = {
     getAllLots,
     getLot,
+    searchLots,
+    getLotsByProjetId,
     addLot,
     updateLot,
     deleteLot
