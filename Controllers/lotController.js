@@ -83,7 +83,7 @@ async function getLotsByProjetId(req, res) {
     try {
         const lots = await lotModel.getLotsByProjetId(projetId);
         if (lots.length === 0) {
-            res.status(404).json({ message: 'Aucun lot trouvé pour ce projet.' });
+            res.status(204).json({ message: 'Aucun lot trouvé pour ce projet.' });
             return;
         }
 
