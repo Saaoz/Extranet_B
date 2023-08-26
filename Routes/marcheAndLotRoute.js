@@ -1,8 +1,8 @@
 const express = require('express');
 const router = express.Router();  // Crée une nouvelle instance du routeur Express
-const { getMarcheAndLotInfo } = require('../Controllers/JoinController');
+const { getMarcheAndLot } = require('../Controllers/marcheAndLotController');
 
 // Route des jointures
-router.get('/join/:projetId/:nom', getMarcheAndLotInfo);
+router.get('/:projetId/:nom', getMarcheAndLot);
 
 module.exports = router;

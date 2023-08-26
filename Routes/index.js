@@ -9,7 +9,7 @@ const dceRoutes = require('./dceRoute');
 const avenantRoutes = require('./avenantRoute');
 const situationRoutes = require('./situationRoute');
 const paiementsRoute = require('./paiementsRoute');
-const joinRoute = require('./JoinRoute');
+const marcheAndLot = require('./marcheAndLotRoute');
 
 // Utilisez les routes individuelles avec leur préfixe approprié
 router.use('/projets', projetRoutes);
@@ -19,7 +19,7 @@ router.use('/dce', dceRoutes);
 router.use('/avenants', avenantRoutes);
 router.use('/situations', situationRoutes);
 router.use('/paiements', paiementsRoute);
-router.use('/join', joinRoute);
+router.use('/marcheAndLot', marcheAndLot);
 
 module.exports = router;
 
