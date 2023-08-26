@@ -13,10 +13,10 @@ const paiementsRoute = require('./paiementsRoute')
 // Utilisez les routes individuelles avec leur préfixe approprié
 router.use('/projets', projetRoutes);
 router.use('/lot', lotRoutes);
-router.use('/marche', marcheRoutes);
+router.use('/marches', marcheRoutes);
 router.use('/dce', dceRoutes);
-router.use('/avenant', avenantRoutes)
-router.use('/situation', situationRoutes)
+router.use('/avenants', avenantRoutes)
+router.use('/situations', situationRoutes)
 router.use('/paiements', paiementsRoute)
 
 module.exports = router;
