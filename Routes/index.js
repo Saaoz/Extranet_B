@@ -7,7 +7,8 @@ const lotRoutes = require('./lotRoute');
 const marcheRoutes = require('./marcheRoute')
 const dceRoutes = require('./dceRoute')
 const avenantRoutes = require('./avenantRoute')
-// Importez d'autres routes si vous en avez
+const situationRoutes = require('./situationRoute')
+const paiementsRoute = require('./paiementsRoute')
 
 // Utilisez les routes individuelles avec leur préfixe approprié
 router.use('/projets', projetRoutes);
@@ -15,7 +16,8 @@ router.use('/lot', lotRoutes);
 router.use('/marche', marcheRoutes);
 router.use('/dce', dceRoutes);
 router.use('/avenant', avenantRoutes)
-// Utilisez d'autres routes avec leur préfixe approprié si nécessaire
+router.use('/situation', situationRoutes)
+router.use('/paiements', paiementsRoute)
 
 module.exports = router;
 
