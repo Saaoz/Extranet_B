@@ -1,15 +1,18 @@
-import mysql from 'mysql2/promise';
-import fs from 'fs/promises';
+const BddPool = require('./Bdd');  // Ajustez le chemin d'accès si nécessaire
+const fs = require('fs');
 
-const connection = await mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    password: '',
-    multipleStatements: true
-});
+async function resetDatabase() {
+    try {
+        // Lire le fichier SQL et le stocker dans une variable
+        const sql = fs.readFileSync('DataBase/resetSQL.sql', 'utf8');  // Ajustez le chemin d'accès si nécessaire
 
-const sql = await fs.readFile('./DataBase/ResetBdd.sql', 'utf-8');
+        // Exécuter les requêtes SQL
+        await BddPool.query(sql);
 
-await connection.query(sql);
+        console.log('Base de données réinitialisée avec succès');
+    } catch (err) {
+        console.error('Erreur lors de la réinitialisation de la base de données:', err);
+    }
+}
 
-console.log('Base de données créée avec succès !');
+resetDatabase();
