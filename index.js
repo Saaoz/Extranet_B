@@ -17,7 +17,7 @@ app.use(cors());
 app.use(express.json());
 
 
-// gestion des erreurs copiée/collée depuis ce lien : https://expressjs.com/en/guide/error-handling.html
+// gestion des erreurs copiée depuis ce lien : https://expressjs.com/en/guide/error-handling.html
 app.use((err, req, res, next) => {
     console.error(err.stack);
     res.status(500).send('Something broke!');
