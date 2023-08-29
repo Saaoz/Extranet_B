@@ -11,7 +11,7 @@ const situationRoutes = require('./situationRoute');
 const paiementsRoute = require('./paiementsRoute');
 const marcheAndLot = require('./marcheAndLotRoute');
 
-// Utilisez les routes individuelles avec leur préfixe approprié
+// Utilisez les routes individuelles avec leur préfixe
 router.use('/projets', projetRoutes);
 router.use('/lot', lotRoutes);
 router.use('/marches', marcheRoutes);
