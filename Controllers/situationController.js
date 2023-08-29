@@ -26,6 +26,20 @@ async function getSituation(req, res) {
     }
 }
 
+//Récupération situation par le marche_id
+async function getSituationByMarcheId(req, res) {
+    try {
+        const {marche_id} = req.params;
+        const situations = await situationModel.getSituationByMarcheId(marche_id);
+        res.json(situations);
+    } catch (error) {
+        console.error('Erreur lors de la récupération de la situation',error);
+        res.status(500).json({error: 'Erreur serveur lors de la récupération de la situation.'});
+    }
+}
+
+
+
 // Ajouter une nouvelle situation
 async function addSituation(req, res) {
     try {
@@ -61,10 +75,13 @@ async function deleteSituation(req, res) {
     }
 }
 
+
+
 module.exports = {
     getAllSituations,
     getSituation,
     addSituation,
     updateSituation,
-    deleteSituation
+    deleteSituation,
+    getSituationByMarcheId
 };
