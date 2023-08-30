@@ -26,6 +26,19 @@ async function getAvenant(req, res) {
     }
 }
 
+//Récupération situation par le marche_id
+async function getAvenantByMarcheId(req, res) {
+    try {
+        const {marche_id} = req.params;
+        const avenant = await situationModel.getAvenantByMarcheId(marche_id);
+        res.json(avenant);
+    } catch (error) {
+        console.error('Erreur lors de la récupération de l\'avenant',error);
+        res.status(500).json({error: 'Erreur serveur lors de la récupération de l\'avenant.'});
+    }
+}
+
+
 // Ajouter un nouveau avenant
 async function addAvenant(req, res) {
     try {
@@ -66,5 +79,6 @@ module.exports = {
     getAvenant,
     addAvenant,
     updateAvenant,
-    deleteAvenant
+    deleteAvenant,
+    getAvenantByMarcheId
 };
