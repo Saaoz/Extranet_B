@@ -31,10 +31,16 @@ async function deleteAvenant(id) {
     await BddPool.query('DELETE FROM avenant WHERE id = ?', [id]);
 }
 
+async function getAvenantByMarcheId(marche_id){
+    const [rows] = await BddPool.query('SELECT * FROM avenant WHERE marche_id = ?', [marche_id]);
+    return rows;
+}
+
 module.exports = {
     getAllAvenants,
     getAvenant,
     addAvenant,
     updateAvenant,
-    deleteAvenant
+    deleteAvenant,
+    getAvenantByMarcheId
 };
