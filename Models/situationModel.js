@@ -31,10 +31,16 @@ async function deleteSituation(id) {
     await BddPool.query('DELETE FROM situation WHERE id = ?', [id]);
 }
 
+async function getSituationByMarcheId(marche_id){
+    const [rows] = await BddPool.query('SELECT * FROM situation WHERE marche_id = ?', [marche_id]);
+    return rows;
+}
+
 module.exports = {
     getAllSituations,
     getSituation,
     addSituation,
     updateSituation,
-    deleteSituation
+    deleteSituation,
+    getSituationByMarcheId,
 };
