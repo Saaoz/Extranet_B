@@ -26,6 +26,19 @@ async function getPaiement(req, res) {
     }
 }
 
+
+//Récupération paiement par le marche_id
+async function getPaiementByMarcheId(req, res) {
+    try {
+        const {marche_id} = req.params;
+        const paiement = await situationModel.getPaiementByMarcheId(marche_id);
+        res.json(paiement);
+    } catch (error) {
+        console.error('Erreur lors de la récupération du paiement',error);
+        res.status(500).json({error: 'Erreur serveur lors de la récupération du paiement.'});
+    }
+}
+
 // Ajouter un nouveau paiement
 async function addPaiement(req, res) {
     try {
@@ -66,5 +79,6 @@ module.exports = {
     getPaiement,
     addPaiement,
     updatePaiement,
-    deletePaiement
+    deletePaiement,
+    getPaiementByMarcheId
 };
