@@ -12,6 +12,7 @@ async function getPaiement(id) {
     return rows[0];
 }
 
+
 // Ajouter un nouveau paiement
 async function addPaiement(data) {
     const { reference, montant_payer, date, etat, marche_id } = data;
@@ -31,10 +32,16 @@ async function deletePaiement(id) {
     await BddPool.query('DELETE FROM paiements WHERE id = ?', [id]);
 }
 
+async function getPaiementByMarcheId(marche_id){
+    const [rows] = await BddPool.query('SELECT * FROM paiements WHERE marche_id = ?', [marche_id]);
+    return rows;
+}
+
 module.exports = {
     getAllPaiements,
     getPaiement,
     addPaiement,
     updatePaiement,
-    deletePaiement
+    deletePaiement,
+    getPaiementByMarcheId
 };
