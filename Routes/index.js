@@ -19,7 +19,7 @@ router.use('/dce', dceRoutes);
 router.use('/avenants', avenantRoutes);
 router.use('/situations', situationRoutes);
 router.use('/paiements', paiementsRoute);
-router.use('/marcheAndLot', marcheAndLot);
+router.use('/marche_lot', marcheAndLot);
 
 module.exports = router;
 
