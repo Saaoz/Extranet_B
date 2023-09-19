@@ -1,16 +1,16 @@
-// authController.js
+require('dotenv').config();
 const passport = require("passport");
 const userModel = require("../Models/userModel");
+const jwt = require ("jsonwebtoken");
+const secret = process.env.JWT_SECRET;
+
 
 // Fonction de connexion
 async function login(req, res, next) {
-//     console.log("Email à rechercher:", req.body.email);
-// console.log("Mot de passe à vérifier:", req.body.password);
     passport.authenticate("local", async function (err, user, info) {
         if (err) return next(err);
 
         if (!user) {
-            // Vous pouvez utiliser le modèle ici pour récupérer plus d'informations si nécessaire.
             const existingUser = await userModel.getUserByEmail(req.body.email);
 
             if (!existingUser) {
@@ -22,9 +22,16 @@ async function login(req, res, next) {
 
         req.logIn(user, function (err) {
             if (err) return next(err);
-            return res.status(200).json({ message: "Successfully logged in." });
+            
+            // Génération du token JWT
+            const token = jwt.sign(
+                { id: 'userId' },
+                secret,
+                { expiresIn: '1h' }
+            );
+
+            return res.status(200).json({ message: "Successfully logged in.", token });
         });
-        // console.log(req.body);
     })(req, res, next);
 }
 
