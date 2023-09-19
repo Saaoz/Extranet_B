@@ -11,7 +11,7 @@ const avenantRoutes = require('./avenantRoute');
 const situationRoutes = require('./situationRoute');
 const paiementsRoute = require('./paiementsRoute');
 const marcheAndLot = require('./marcheAndLotRoute');
-const passportRoutes = require('./passportRoute');  // last add
+const userRoutes = require('./userRoute');  // last add
 
 // Utilisez les routes individuelles avec leur préfixe
 router.use('/projets', projetRoutes);
@@ -22,6 +22,6 @@ router.use('/avenants', avenantRoutes);
 router.use('/situations', situationRoutes);
 router.use('/paiements', paiementsRoute);
 router.use('/marche_lot', marcheAndLot);
-router.use('/auth', passportRoutes);  // last add
+router.use('/user', userRoutes);  // last add
 
 module.exports = router;
