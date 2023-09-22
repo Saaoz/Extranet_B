@@ -1,6 +1,8 @@
 const BddPool = require('../DataBase/Bdd');
 const bcrypt = require('bcrypt');
-// userModels.js
+const jwt = require('jsonwebtoken');
+const secret = process.env.JWT_SECRET;
+
 
 // Fonction pour récupérer un utilisateur par son email
 async function getUserByEmail(email) {
@@ -23,10 +25,29 @@ async function findUserById(id) {
     const [rows] = await BddPool.query('SELECT * FROM user WHERE id = ?', [id]);
     return rows[0];
   }
-  
+
+async function getUserById(userId) {
+    const [row] = await BddPool.query('SELECT prenom, nom, mobile, email from user WHERE id = ?', [userId]);
+    return row;
+}
+
+
+async function getUserByIdFromToken(token) {
+  try {
+      const decoded = jwt.verify(token, secret);
+      const userId = decoded.id;
+      const [row] = await BddPool.query('SELECT prenom, nom, mobile, email from user WHERE id = ?', [userId]);
+      return row;
+  } catch(err) {
+      console.log(err);
+      throw new Error("Erreur de vérification du token");
+  }
+}
 
 module.exports = {
     getUserByEmail,
     createUser,
-    findUserById 
+    findUserById,
+    getUserById,
+    getUserByIdFromToken
 };

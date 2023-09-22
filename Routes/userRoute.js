@@ -8,4 +8,6 @@ router.post('/login', authController.login);
 
 router.post('/create', authController.createUser);
 
+router.post('/', authController.getUserByIdFromToken);
+
 module.exports = router;
