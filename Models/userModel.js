@@ -10,9 +10,9 @@ async function getUserByEmail(email) {
     const [rows] = await BddPool.query('SELECT * FROM user WHERE email = ?', [email]);
     // console.log("Résultat de la requête:", rows);
     return rows[0];
-  }
+}
 
-  async function createUser(prenom, nom, mobile, email, password) {
+async function createUser(prenom, nom, mobile, email, password) {
     const hashedPassword = await bcrypt.hash(password, 10);
     const [result] = await BddPool.query(
         'INSERT INTO user (prenom, nom, mobile, email, password) VALUES (?, ?, ?, ?, ?)',
@@ -21,10 +21,19 @@ async function getUserByEmail(email) {
     return result.insertId;
 }
 
-async function findUserById(id) {
-    const [rows] = await BddPool.query('SELECT * FROM user WHERE id = ?', [id]);
-    return rows[0];
-  }
+async function UpdateUser(prenom, nom, mobile, email, newPassword, id) {
+    // Hash le nouveau mot de passe
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+    // Mettez à jour l'utilisateur dans la base de données avec le nouveau mot de passe hashé
+    const [rows] = await BddPool.query(
+        'UPDATE user SET prenom = ?, nom = ?, mobile = ?, email = ?, password = ? WHERE id = ?',
+        [prenom, nom, mobile, email, hashedPassword, id]
+    );
+
+    return rows;
+}
+
 
 async function getUserById(userId) {
     const [row] = await BddPool.query('SELECT prenom, nom, mobile, email from user WHERE id = ?', [userId]);
@@ -33,21 +42,24 @@ async function getUserById(userId) {
 
 
 async function getUserByIdFromToken(token) {
-  try {
-      const decoded = jwt.verify(token, secret);
-      const userId = decoded.id;
-      const [row] = await BddPool.query('SELECT prenom, nom, mobile, email from user WHERE id = ?', [userId]);
-      return row;
-  } catch(err) {
-      console.log(err);
-      throw new Error("Erreur de vérification du token");
-  }
+    try {
+        const decoded = jwt.verify(token, secret);
+        const userId = decoded.id;
+        const [row] = await BddPool.query('SELECT id, prenom, nom, email, mobile from user WHERE id = ?', [userId]); 
+        return row;
+    } catch (err) {
+        console.log(err);
+        throw new Error("Erreur de vérification du token");
+    }
 }
+
+
+
 
 module.exports = {
     getUserByEmail,
     createUser,
-    findUserById,
     getUserById,
-    getUserByIdFromToken
+    getUserByIdFromToken,
+    UpdateUser
 };

@@ -10,4 +10,6 @@ router.post('/create', authController.createUser);
 
 router.post('/', authController.getUserByIdFromToken);
 
+router.post('/update', authController.UpdateUser);
+
 module.exports = router;

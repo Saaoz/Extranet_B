@@ -59,6 +59,30 @@ async function createUser(req, res) {
     }
 }
 
+async function UpdateUser(req, res) {
+    const { prenom, nom, mobile, email, password } = req.body;
+    const id = req.userId; 
+    try {
+        const update = await userModel.UpdateUser(
+            prenom,
+            nom,
+            mobile,
+            email,
+            password,
+            id 
+        );
+
+        if (update.affectedRows === 0) { // Vérifiez si la mise à jour a été effectuée
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        res.status(201).json({ message: "User updated successfully", update });
+    } catch (error) {
+        console.error("could not update user", error);
+        res.status(500).json({ message: "Internal Server Error" });
+    }
+}
+
 function getUserByIdFromToken(req, res) {
     const bearerToken = req.headers.authorization;
     if (!bearerToken) {
@@ -85,4 +109,5 @@ module.exports = {
     login,
     createUser,
     getUserByIdFromToken,
+    UpdateUser
 };
