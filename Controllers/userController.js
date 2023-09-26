@@ -31,9 +31,13 @@ async function login(req, res, next) {
 
             // Génération du token JWT
             const token = jwt.sign({ id: user.id }, secret, { expiresIn: "1h" });
-            // console.log("Generated Token:", token);
-            const decoded = jwt.decode(token);
-            // console.log("Token Expiry:", new Date(decoded.exp * 1000));
+
+            // Envoi du token dans un cookie HttpOnly
+            res.cookie('token', token, {
+                httpOnly: true,
+                // secure: true, // utiliser uniquement en HTTPS
+                maxAge: 3600000 // durée de vie du cookie en millisecondes (1 heure ici)
+            });
 
             return res
                 .status(200)
@@ -41,6 +45,12 @@ async function login(req, res, next) {
         });
     })(req, res, next);
 }
+
+async function logout(req, res){
+    res.clearCookie('token'); // supprimez le cookie
+    res.status(200).json({ message: 'Déconnecté avec succès' });
+}
+
 
 async function createUser(req, res) {
     const { prenom, nom, mobile, email, password } = req.body;
@@ -109,5 +119,6 @@ module.exports = {
     login,
     createUser,
     getUserByIdFromToken,
-    UpdateUser
+    UpdateUser,
+    logout
 };

@@ -12,4 +12,6 @@ router.post('/', authController.getUserByIdFromToken);
 
 router.post('/update', authController.UpdateUser);
 
+router.post('/logout', authController.logout)
+
 module.exports = router;
