@@ -1,22 +1,28 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
+const cookieParser = require('cookie-parser');
 const flash = require('connect-flash');
 const passport = require('passport');
 const session = require('express-session');
 const initializePassport = require('./config/passport-config');
+const secret = process.env.JWT_SECRET;
 
 const app = express();
 
 // Middleware pour CORS
-app.use(cors());
+app.use(cors({
+  origin: 'http://localhost:3000', // remplacez par l'origine de votre application cliente
+  credentials: true,
+}));
 
 // Middleware pour parser le JSON
 app.use(express.json());
 
+app.use(cookieParser());
 // Configuration des sessions
 app.use(session({
-  secret: 'votreSecret',
+  secret: secret,
   resave: false,
   saveUninitialized: false
 }));

@@ -29,13 +29,13 @@ async function login(req, res, next) {
         req.logIn(user, function (err) {
             if (err) return next(err);
 
-            // Génération du token JWT
+            // Génération token JWT
             const token = jwt.sign({ id: user.id }, secret, { expiresIn: "1h" });
 
-            // Envoi du token dans un cookie HttpOnly
+            // Envoi token dans un cookie HttpOnly
             res.cookie('token', token, {
                 httpOnly: true,
-                // secure: true, // utiliser uniquement en HTTPS
+                // secure: true, // uniquement en HTTPS
                 maxAge: 3600000 // durée de vie du cookie en millisecondes (1 heure ici)
             });
 
@@ -46,9 +46,32 @@ async function login(req, res, next) {
     })(req, res, next);
 }
 
-async function logout(req, res){
-    res.clearCookie('token'); // supprimez le cookie
-    res.status(200).json({ message: 'Déconnecté avec succès' });
+async function logout(req, res) {
+    try {
+        // Test si cookie de token existe avant d'essayer de le supprimer
+        const token = req.cookies.token;
+        if (!token) {
+            // Si aucun cookie de token n'est présent, renvoyez une erreur
+            return res.status(400).json({ message: 'Aucun token trouvé' });
+        }
+
+        // Supprimez le cookie
+        res.clearCookie('token', { path: '/', httpOnly: true });
+
+
+        // Vérifiez si le cookie a bien été supprimé
+        if (req.cookies.token) {
+            // Si le cookie n'est pas supprimé, renvoyez une erreur
+            throw new Error('La déconnexion a échoué');
+        }
+
+        // Si tout va bien, renvoyez un message de succès
+        res.status(200).json({ message: 'Déconnecté avec succès' });
+    } catch (error) {
+        console.error(error);
+        // En cas d'erreur, renvoyez un message d'erreur
+        res.status(500).json({ message: error.message });
+    }
 }
 
 
@@ -71,7 +94,7 @@ async function createUser(req, res) {
 
 async function UpdateUser(req, res) {
     const { prenom, nom, mobile, email, password } = req.body;
-    const id = req.userId; 
+    const id = req.userId;
     try {
         const update = await userModel.UpdateUser(
             prenom,
@@ -79,7 +102,7 @@ async function UpdateUser(req, res) {
             mobile,
             email,
             password,
-            id 
+            id
         );
 
         if (update.affectedRows === 0) { // Vérifiez si la mise à jour a été effectuée
