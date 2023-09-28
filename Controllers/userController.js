@@ -48,28 +48,14 @@ async function login(req, res, next) {
 
 async function logout(req, res) {
     try {
-        // Test si cookie de token existe avant d'essayer de le supprimer
-        const token = req.cookies.token;
-        if (!token) {
-            // Si aucun cookie de token n'est présent, renvoyez une erreur
-            return res.status(400).json({ message: 'Aucun token trouvé' });
-        }
-
-        // Supprimez le cookie
+        // console.log('Début de la déconnexion'); 
+        
         res.clearCookie('token', { path: '/', httpOnly: true });
-
-
-        // Vérifiez si le cookie a bien été supprimé
-        if (req.cookies.token) {
-            // Si le cookie n'est pas supprimé, renvoyez une erreur
-            throw new Error('La déconnexion a échoué');
-        }
-
-        // Si tout va bien, renvoyez un message de succès
+        // console.log('Cookie supprimé'); 
+        
         res.status(200).json({ message: 'Déconnecté avec succès' });
     } catch (error) {
         console.error(error);
-        // En cas d'erreur, renvoyez un message d'erreur
         res.status(500).json({ message: error.message });
     }
 }
